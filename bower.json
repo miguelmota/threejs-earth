@@ -1,0 +1,20 @@
+{
+  "name": "threejs-earth",
+  "version": "0.0.1",
+  "authors": [
+    "Miguel Mota <miguelmota2@gmail.com>"
+  ],
+  "description": "Rotating planet earth",
+  "main": "scripts/main.js",
+  "keywords": [
+    "three.js",
+    "acorns"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/miguelmota/threejs-earth",
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "stats.js": "*",
+    "three.js": "*"
+  }
+}
