@@ -1,6 +1,6 @@
 # three.js Earth
 
-Rotating Earth rendered with [Three.js](http://threejs.org/).
+Rotating planet Earth rendered with [three.js](http://threejs.org/).
 
 # Demo
 
