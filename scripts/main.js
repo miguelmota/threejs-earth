@@ -11,8 +11,13 @@ var scene = new THREE.Scene();
 // arg3: near clipping plane
 // arg4: far clipping plane
 // if object is too far or too close to camera it won't render
-var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 1, 10000);
-camera.position.set(30,40,120);
+var camera = new THREE.PerspectiveCamera(
+  45, // angle of the FOV (Field of View), a large angle is like a wide angle lens
+  window.innerWidth/window.innerHeight, // the aspect ratio of the screen
+  0.01, // objects closer than this won't be picked up by the camera
+  1000 // objects further than this won't be either
+);
+camera.position.z = 1;
 camera.lookAt(new THREE.Vector3(0,0,0));
 
 // RENDERER
@@ -26,7 +31,7 @@ var renderStack = [];
 
 // LIGHT
 var light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5,5,5).normalize();
+light.position.set(1,1,5);
 light.castShadow = true;
 light.shadowCameraNear = 0.01;
 light.shadowCameraFar = 15;
@@ -45,6 +50,12 @@ light.shadowMapHeight = 1024;
 scene.add(light);
 scene.add(new THREE.AmbientLight(0x333333));
 
+// CONTAINER
+var container = new THREE.Object3D();
+container.rotateZ(-23.4 * Math.PI/180);
+container.position.z = 0;
+scene.add(container);
+
 // EARTH
 var earthGeometry = new THREE.SphereGeometry(0.5, 32, 32);
 var earthMaterial = new THREE.MeshPhongMaterial({
@@ -56,12 +67,35 @@ var earthMaterial = new THREE.MeshPhongMaterial({
   side: THREE.DoubleSide
 });
 var earth = new THREE.Mesh(earthGeometry, earthMaterial);
+earth.receiveShadow = true;
+earth.castShadow = true;
 
 renderStack.push(function(now, delta) {
   earth.rotation.y += (1/8 * delta) / 1000;
 });
 
-scene.add(earth);
+container.add(earth);
+
+// MOON
+var moonGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+var moonMaterial = new THREE.MeshPhongMaterial({
+  map: THREE.ImageUtils.loadTexture('images/moonmap1k.jpg'),
+  //bumpMap: THREE.ImageUtils.loadTexture('images/moonbump1k.jpg'),
+  //bumpScale: 0.05,
+  side: THREE.DoubleSide
+});
+
+var moon = new THREE.Mesh(moonGeometry, moonMaterial);
+moon.position.set(0.5,0.5,0.5);
+moon.scale.multiplyScalar(1/7);
+moon.receiveShadow = true;
+moon.castShadow = true;
+
+renderStack.push(function(now, delta) {
+  moon.rotation.y += (1/8 * delta) / 1000;
+});
+
+container.add(moon);
 
 // CLOUDS
 // create destination canvas
@@ -120,6 +154,8 @@ var cloudMaterial = new THREE.MeshPhongMaterial({
   depthWrite: false,
 });
 var cloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
+cloud.receiveShadow = true;
+cloud.castShadow = true;
 earth.add(cloud); // will move together with earth
 
 renderStack.push(function(now, delta) {
