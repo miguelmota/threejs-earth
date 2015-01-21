@@ -74,7 +74,18 @@ renderStack.push(function(now, delta) {
   earth.rotation.y += (1/8 * delta) / 1000;
 });
 
+// EARTH GLOW
+
+var earthGlowMaterial = THREEx.createAtmosphereMaterial();
+earthGlowMaterial.uniforms.glowColor.value.set(0x00b3ff);
+earthGlowMaterial.uniforms.coeficient.value = 0.8;
+earthGlowMaterial.uniforms.power.value = 2.0;
+var earthGlow = new THREE.Mesh(earthGeometry, earthGlowMaterial);
+earthGlow.scale.multiplyScalar(1.02);
+earthGlow.position = earth.position;
+
 container.add(earth);
+container.add(earthGlow);
 
 // MOON
 var moonGeometry = new THREE.SphereGeometry(0.5, 32, 32);
