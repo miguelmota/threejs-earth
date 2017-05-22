@@ -6,7 +6,7 @@ Rotating planet Earth rendered with [three.js](http://threejs.org/).
 
 # Demo
 
-[http://lab.moogs.io/threejs-earth](http://lab.moogs.io/threejs-earth)
+[https://lab.miguelmota.com/threejs-earth](https://lab.miguelmota.com/threejs-earth)
 
 # Sources
 
